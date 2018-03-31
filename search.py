@@ -69,14 +69,18 @@ def search(args, searchlist):
     return foundf, foundd
 
 def printresults(files, dirs, searchlist):
-    print("Files Matching '" + searchlist[0] + "':")
-    if not files:
-        print('   None')
-    else:
-        print("   " + "\n   ".join(files))
+    for x in searchlist:
+        print("Files Matching '" + searchlist[x] + "':")
+        if not files:
+            print('   None')
+        else:
+            print("   " + "\n   ".join(files))
 
-    print("Directory Matching '" + searchlist[0] + "':")
-    
+        print("Directory Matching '" + searchlist[x] + "':")
+        if not dirs:
+            print('   None')
+        else:
+            print("   " + "\n   ".join(dirs))
 
 if __name__ == "__main__":
     sys.exit(main())
