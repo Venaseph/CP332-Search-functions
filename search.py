@@ -17,7 +17,8 @@ def argparser():
     parser = argparse.ArgumentParser(description='Search Function - Assignment 2')
     parser.add_argument('--match', '-m', required='True', help='comma-seperated list of patterns to match (Required)')
     parser.add_argument('--ignore-case', '-i', action='store_true', help='ignore upper/lower case')
-    parser.add_argument('-r', action='store_true', help='traverse all sub-directories recursively to search for matches within any sub-directories')
+    parser.add_argument('-r', action='store_true', help="""traverse all sub-directories recursively to search for 
+    matches within any sub-directories""")
 
     args = parser.parse_args()
     # Regex match Letters/Numbers/Commas
@@ -43,21 +44,21 @@ def createlist(args):
 # Dir/file search Handling
 def search(args, searchlist):
     cwd = os.getcwd()
+    foundf = []
+    foundd = []
 
     if args.r:
-        foundf = 0
-        foundd = 0
-        for x in searchlist:
-            print("Files Matching '" + searchlist[0] + "':")
+        for term in searchlist:
             for root, directory, file in os.walk(cwd):
-                for name in file:
-                    if x in name:
-                        print(os.path.join(root, name))
-                        foundf += 1
-        if foundf == 0:
-            print('     None')
+                for string in file:
+                    if term in string:
+                        foundf.append(os.path.join(root, string))
 
-
+    print("Files Matching '" + searchlist[0] + "':")
+    if not foundf:
+        print('   None')
+    else:
+        print("   " + "\n   ".join(foundf))
 
 
 if __name__ == "__main__":
