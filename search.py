@@ -9,6 +9,7 @@ def main():
     searchlist = createlist(args)
     files, dirs = search(args, searchlist)
     printresults(files, dirs, searchlist)
+
     return (0)
 
 
@@ -45,11 +46,11 @@ def createlist(args):
 # Dir/file search Handling
 def search(args, searchlist):
     cwd = os.getcwd()
-    foundf = []
-    foundd = []
+    found = []
 
     if args.r:
         for term in searchlist:
+            found.append([term])
             for root, directory, file in os.walk(cwd):
                 for fstring in file:
                     if term in fstring:
@@ -66,11 +67,11 @@ def search(args, searchlist):
                     if os.path.isdir:
                         foundd.append(os.path.join(cwd, string))
 
-    return foundf, foundd
+    return found
 
 def printresults(files, dirs, searchlist):
-    for x in searchlist:
-        print("Files Matching '" + searchlist[x] + "':")
+    for x, term in enumerate(searchlist):
+        print("Files Matching '" + term + "':")
         if not files:
             print('   None')
         else:
