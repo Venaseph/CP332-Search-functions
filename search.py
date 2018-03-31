@@ -7,8 +7,8 @@ import os
 def main():
     args = argparser()
     searchlist = createlist(args)
-    search(args, searchlist)
-
+    files, dirs = search(args, searchlist)
+    printresults(files, dirs, searchlist)
     return (0)
 
 
@@ -21,6 +21,7 @@ def argparser():
     matches within any sub-directories""")
 
     args = parser.parse_args()
+
     # Regex match Letters/Numbers/Commas
     if re.match('[a-zA-Z0-9,.]', args.match):
         return args
@@ -50,16 +51,32 @@ def search(args, searchlist):
     if args.r:
         for term in searchlist:
             for root, directory, file in os.walk(cwd):
-                for string in file:
-                    if term in string:
-                        foundf.append(os.path.join(root, string))
+                for fstring in file:
+                    if term in fstring:
+                        foundf.append(os.path.join(root, fstring))
+                for dstring in directory:
+                    if term in dstring:
+                        foundd.append(os.path.join(root, dstring))
+    else:
+        for term in searchlist:
+            for string in os.listdir(cwd):
+                if  term in string:
+                    if os.path.isfile:
+                        foundf.append(os.path.join(cwd, string))
+                    if os.path.isdir:
+                        foundd.append(os.path.join(cwd, string))
 
+    return foundf, foundd
+
+def printresults(files, dirs, searchlist):
     print("Files Matching '" + searchlist[0] + "':")
-    if not foundf:
+    if not files:
         print('   None')
     else:
-        print("   " + "\n   ".join(foundf))
+        print("   " + "\n   ".join(files))
 
+    print("Directory Matching '" + searchlist[0] + "':")
+    
 
 if __name__ == "__main__":
     sys.exit(main())
