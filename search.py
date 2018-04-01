@@ -7,8 +7,7 @@ import os
 def main():
     args = argparser()
     searchlist = createlist(args)
-    files, dirs = search(args, searchlist)
-    printresults(files, dirs, searchlist)
+    search(args, searchlist)
 
     return (0)
 
@@ -46,42 +45,39 @@ def createlist(args):
 # Dir/file search Handling
 def search(args, searchlist):
     cwd = os.getcwd()
-    found = []
+    foundfile = []
+    founddir = []
 
-    if args.r:
-        for term in searchlist:
-            found.append([term])
-            for root, directory, file in os.walk(cwd):
-                for fstring in file:
-                    if term in fstring:
-                        foundf.append(os.path.join(root, fstring))
-                for dstring in directory:
-                    if term in dstring:
-                        foundd.append(os.path.join(root, dstring))
-    else:
-        for term in searchlist:
-            for string in os.listdir(cwd):
-                if  term in string:
-                    if os.path.isfile:
-                        foundf.append(os.path.join(cwd, string))
-                    if os.path.isdir:
-                        foundd.append(os.path.join(cwd, string))
+    for term in searchlist:
+        if args.r:
+            searchparams = os.walk(cwd)
+        else:
+            searchparams = [next(os.walk(cwd))]
+        for root, directory, file in searchparams:
+            for fstring in file:
+                if term in fstring:
+                    foundfile.append(os.path.join(root, fstring))
+            for dstring in directory:
+                if term in dstring:
+                    founddir.append(os.path.join(root, dstring))
+        printresults(foundfile, founddir, term)
+        foundfile.clear()
+        founddir.clear()
 
-    return found
 
-def printresults(files, dirs, searchlist):
-    for x, term in enumerate(searchlist):
+def printresults(files, dirs, term):
         print("Files Matching '" + term + "':")
         if not files:
             print('   None')
         else:
             print("   " + "\n   ".join(files))
 
-        print("Directory Matching '" + searchlist[x] + "':")
+        print("Directory Matching '" + term + "':")
         if not dirs:
             print('   None')
         else:
             print("   " + "\n   ".join(dirs))
+
 
 if __name__ == "__main__":
     sys.exit(main())
