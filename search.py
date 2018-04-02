@@ -53,14 +53,14 @@ def search(args, searchlist):
     foundfile = []
     founddir = []
 
-    # walk param handling for recursive implementation
-    if args.r:
-        searchparams = os.walk(cwd)
-    else:
-        # next will only search starting dir
-        searchparams = [next(os.walk(cwd))]
-
     for term in searchlist:
+        # walk param handling for recursive implementation
+        if args.r:
+            searchparams = os.walk(cwd)
+        else:
+            # next will only search starting dir
+            searchparams = [next(os.walk(cwd))]
+
         for root, directory, file in searchparams:
             for fstring in file:
                 if term in fstring:
