@@ -33,11 +33,8 @@ def argparser():
 
 # Argparse into List
 def createlist(args):
-    # Any internal - characters in an argparse name will be converted to _
-    if args.ignore_case:
-        searchstring = args.match.lower()
-    else:
-        searchstring = args.match
+
+    searchstring = args.match
 
     # split string on commas
     searchlist = searchstring.split(',')
@@ -63,11 +60,19 @@ def search(args, searchlist):
 
         for root, directory, file in searchparams:
             for fstring in file:
-                if term in fstring:
-                    foundfile.append(os.path.join(root, fstring))
+                if args.ignore_case:
+                    if term.casefold() in fstring.casefold():
+                        foundfile.append(os.path.join(root, fstring))
+                else:
+                    if term in fstring:
+                        foundfile.append(os.path.join(root, fstring))
             for dstring in directory:
-                if term in dstring:
-                    founddir.append(os.path.join(root, dstring))
+                if args.ignore_case:
+                    if term.casefold() in dstring.casefold():
+                        founddir.append(os.path.join(root, dstring))
+                else:
+                    if term in dstring:
+                        founddir.append(os.path.join(root, dstring))
         printresults(foundfile, founddir, term)
         # clear lists for next term
         foundfile.clear()
