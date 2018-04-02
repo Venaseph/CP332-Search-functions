@@ -58,7 +58,7 @@ def search(args, searchlist):
         if args.r:
             searchparams = os.walk(cwd)
         else:
-            # next will only search starting dir
+            # next will only search starting dir, must be in loop to reset
             searchparams = [next(os.walk(cwd))]
 
         for root, directory, file in searchparams:
